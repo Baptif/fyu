@@ -1,0 +1,9 @@
+{
+  "appId": "com.fyu.app",
+  "appName": "F*yu",
+  "webDir": "www",
+  "backgroundColor": "#15171B",
+  "android": {
+    "backgroundColor": "#15171B"
+  }
+}
