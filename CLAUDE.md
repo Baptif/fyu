@@ -17,12 +17,18 @@ Pas de framework, pas de build web : on édite `www/index.html` directement.
 - Test rapide dans un navigateur : servir `www/` (ex. `npx serve www`) et émuler un mobile ~390 px de large.
 
 ## Données et architecture
-- Persistance : `localStorage`, clé `fonte_data_v1` (objet `data` : sessions, current, schedule[7], profile, settings{accentColor}, programs[], exercises[]). Migrations dans `loadData()`.
-- Modèles : programme `{id, name, exercises:[{name,sets}], color}` ; `schedule[0..6]` (lundi = 0) = id de programme ou null ; séance `{date, name, duration, sets:[{ex,reps,weight}]}` (la plus récente en premier) ; catalogue `data.exercises=[{name, group}]` avec groupes Push / Pull / Legs / Autre.
+- Persistance : `localStorage`, clé `fonte_data_v1` (objet `data` : sessions, current, schedule[7], profile, settings{accentColor, customRest, breathOff, showMuscles, dropPct}, programs[], exercises[]). Migrations dans `loadData()`.
+- Modèles : programme `{id, name, exercises:[{name,sets}], color}` ; `schedule[0..6]` (lundi = 0) = id de programme ou null ; séance `{date, name, duration, note, sets:[{ex,reps,weight}]}` (série unilatérale : `repsR` en plus ; série dégressive : `drop:true, of:<sid de la série>`, les séries normales ont un `sid`) (la plus récente en premier) ; catalogue `data.exercises=[{name, group, unilateral?}]` avec groupes Push / Pull / Legs / Autre.
 - Niveaux : XP calculée depuis les séances (100 / séance + 10 / série (20 max) + 50 si la précédente date de 1 à 3 jours ; palier 250 + 50 × niveau). La streak (jours consécutifs) est une stat séparée.
 - Navigation : `showView(id, btn)` ; `main` est le conteneur qui défile. En mode séance, `body.session-mode` masque le menu du bas et l'en-tête.
 - Pas de `alert()/confirm()` : utiliser `askConfirm()` et `showToast()`.
 - Échapper tout texte utilisateur avec `esc()`.
+
+## Fonctions de séance (mode séance)
+- Menu du bas propre au mode séance : Chrono / Tracking / Notes. Chrono : repos (préréglages + perso), chrono libre, courbe de respiration (6 resp./min, rythme rapide sur la fin).
+- Carte d'exercice : icône du muscle (`muscleIcon`, option dans Paramètres), menu « ⋯ » (superset avec un autre exercice, unilatéral, dégressif sur une série choisie, retirer).
+- Superset : `ss` sur les exercices de `sessionExercises` (séance en cours uniquement). Dégressif : sous-lignes liées à une série par `sid`; elles comptent dans le tonnage, pas dans le nombre de séries (`nMain()`).
+- Fin de séance : récap plein écran (`buildRecap`).
 
 ## Design
 - Thème sombre unique, ton « motivation / rage » (sobre, tranchant, pas enjoué). Jetons CSS dans `:root` : `--bg #15171B`, `--surface`, `--accent #D8A94E` (réglable dans Paramètres), `--teal`, `--danger`.
