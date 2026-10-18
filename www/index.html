@@ -12,7 +12,7 @@
     box-sizing:border-box;
     --bg:#15171B; --surface:#1E2126; --surface2:#262A31; --line:#31363F;
     --text:#EDEEEC; --text-dim:#9CA2AE;
-    --accent:#D8A94E; --accent-dim:#6E5A2E;
+    --accent:#E2703A; --accent-dim:#703A1E;
     --teal:#5FB3A6;
     --danger:#C96A5B;
     padding-top:env(safe-area-inset-top,0px);
@@ -21,12 +21,12 @@
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
       --bg:#15171B; --surface:#1E2126; --surface2:#262A31; --line:#31363F;
-      --text:#EDEEEC; --text-dim:#9CA2AE; --accent:#D8A94E; --accent-dim:#6E5A2E; --teal:#5FB3A6; --danger:#C96A5B;
+      --text:#EDEEEC; --text-dim:#9CA2AE; --accent:#E2703A; --accent-dim:#703A1E; --teal:#5FB3A6; --danger:#C96A5B;
     }
   }
   :root[data-theme="dark"]{
     --bg:#15171B; --surface:#1E2126; --surface2:#262A31; --line:#31363F;
-    --text:#EDEEEC; --text-dim:#9CA2AE; --accent:#D8A94E; --accent-dim:#6E5A2E; --teal:#5FB3A6; --danger:#C96A5B;
+    --text:#EDEEEC; --text-dim:#9CA2AE; --accent:#E2703A; --accent-dim:#703A1E; --teal:#5FB3A6; --danger:#C96A5B;
   }
   *{box-sizing:border-box;}
   html{scroll-padding-top:env(safe-area-inset-top,0px);}
@@ -61,6 +61,7 @@
   }
   .card h3{font-size:15px; margin-bottom:10px;}
   #historyList .prog-item.sc{background:none; border:0; padding:14px 0 0; margin-top:0; border-radius:0;}
+  #historyList .ex-tag-vol{display:none;}
   #historyList .prog-item.sc .ex-tag{background:var(--surface2);}
   .card h3.card-sep{padding-bottom:12px; margin-bottom:4px; border-bottom:1px solid var(--line);}
   .lt-head{display:flex; justify-content:space-between; align-items:baseline; gap:10px; padding:10px 0 8px; font-weight:600;}
@@ -138,6 +139,7 @@
   .dd-menu{position:absolute; left:0; right:0; top:calc(100% + 6px); z-index:30; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:6px; box-shadow:0 12px 30px rgba(0,0,0,.45); max-height:260px; overflow-y:auto;}
   .dd-btn{font-size:13px; padding:10px 13px;}
   .dd-item{font-size:13px; padding:10px;}
+  .nt-sec{font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px;}
   .tp-row{display:flex; flex-wrap:wrap; gap:8px;}
   .tp{font-family:inherit; font-size:13px; padding:8px 14px; border-radius:999px; background:var(--surface2); border:1px solid var(--line); color:var(--text-dim);}
   .tp.on{background:transparent; border-color:var(--accent); color:var(--accent); font-weight:700;}
@@ -158,6 +160,8 @@
   .prog-tags.sc-exs{margin:12px 0 0;}
   .prog-item.sc .ex-tag{background:var(--surface); padding:8px 14px; gap:7px;}
   .ex-tag-vol{color:var(--text-dim); font-variant-numeric:tabular-nums;}
+  #sdBody.note{min-height:0;}
+  .sc-btns{display:flex; gap:8px; flex:none;}
   .sd-ico{flex:none; width:34px; height:30px; display:grid; place-items:center; padding:0; background:var(--surface2); border:1px solid var(--line); border-radius:8px; color:var(--text-dim);}
   .sd-ico svg{width:16px; height:16px;}
   .sd-ico:active{color:var(--accent); border-color:var(--accent);}
@@ -262,7 +266,12 @@
   .cal-cell.today .num{font-weight:700;}
   .cal-indicators{display:flex; align-items:center; gap:3px; margin-top:2px;}
   .cal-cell .dot{width:5px; height:5px; border-radius:50%;}
-  .cal-cell .flame{font-size:10px; line-height:1;}
+  .cal-cell.done{background:color-mix(in srgb, var(--accent) 16%, var(--surface2)); border-color:color-mix(in srgb, var(--accent) 45%, var(--line));}
+  .cal-cell.done .num{color:var(--accent); font-weight:700;}
+  .ym-c.done{background:color-mix(in srgb, var(--accent) 16%, var(--surface2)); border-color:color-mix(in srgb, var(--accent) 45%, var(--line));}
+  .ym-c.done b{color:var(--accent); font-weight:700;}
+  .cal-cell.today.done{border-color:var(--accent);}
+  .cal-legend .sw.sw-done{border-radius:3px; background:color-mix(in srgb, var(--accent) 16%, var(--surface2)); border:1px solid color-mix(in srgb, var(--accent) 45%, var(--line)); width:10px; height:10px;}
   .ex-group{margin-bottom:14px;}
   .ex-group:last-child{margin-bottom:0;}
   .ex-group-title{font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:.05em; font-weight:700; margin-bottom:7px;}
@@ -421,13 +430,14 @@
   .dname{display:inline-flex; align-items:center; gap:3px; font-size:10px; color:var(--text-dim); text-transform:uppercase; letter-spacing:.06em;}
   .dnum{font-size:22px; font-weight:700; line-height:1; font-family:'Space Grotesk',sans-serif; font-variant-numeric:tabular-nums; margin-top:2px;}
   .day-pill{position:relative;}
-  .dmark{display:inline-flex; line-height:1;}
+  .day-pill .dmark{position:absolute; top:6px; right:6px; display:inline-flex; line-height:1;}
   .dmark svg{width:10px; height:10px; display:block;}
   .dmark.flame{font-size:11px;}
   .dmark.miss{color:var(--danger);}
   .ddot{flex:none; width:6px; height:6px; border-radius:50%; margin-top:4px;}
   .dtitle{display:flex; align-items:flex-start; justify-content:center; gap:4px; font-size:11px; line-height:1.25; color:var(--text); max-width:100%; font-weight:600; text-align:left;}
   .dtitle span{display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; overflow-wrap:anywhere; min-width:0;}
+  .dsep{font-size:11px; line-height:1; color:var(--text-dim); margin:2px 0 4px;}
   .dstats{margin-top:4px; width:100%; display:flex; flex-direction:column; gap:2px; font-size:10px; color:var(--text-dim); line-height:1.25; font-variant-numeric:tabular-nums;}
   .dstats b{color:var(--text); font-weight:700; font-size:12px; font-family:'Space Grotesk',sans-serif;}
   .day-pill.done .dstats b{color:var(--teal);}
@@ -660,7 +670,7 @@
     <!-- SEANCES -->
     <section class="view active" id="view-seances">
       <div class="greeting-row">
-        <div class="greeting" id="greetingText">Salut 👋</div>
+        <div class="greeting" id="greetingText">Encore toi ?</div>
       </div>
 
       <div class="fd-card">
@@ -674,7 +684,7 @@
       <button class="btn-ghost btn-full" style="margin-bottom:32px;" onclick="openProgramPicker()">Faire une autre séance</button>
 
       <div class="streak-row">
-        <div class="streak-chip" id="streakChip" title="Jours d'affilée"><span id="streakChipFlame">🔥</span><b id="streakChipNum">0</b><span class="sc-unit">j</span></div>
+        <div class="streak-chip" id="streakChip" title="Séances d'affilée"><span id="streakChipFlame">🔥</span><b id="streakChipNum">0</b><span class="sc-unit">séances</span></div>
       </div>
 
       <div class="card">
@@ -905,9 +915,9 @@
         <h3>Apparence</h3>
         <label for="accentColorInput">Couleur secondaire</label>
         <div style="display:flex; align-items:center; gap:10px;">
-          <input id="accentColorInput" type="color" value="#D8A94E" onchange="updateAccentColor(this.value)" style="width:48px; height:40px; padding:2px; cursor:pointer;">
-          <span class="muted" id="accentColorValue">#D8A94E</span>
-          <button class="btn-ghost" style="margin-left:auto;" onclick="resetAccentColor()">Jaune par défaut</button>
+          <input id="accentColorInput" type="color" value="#E2703A" onchange="updateAccentColor(this.value)" style="width:48px; height:40px; padding:2px; cursor:pointer;">
+          <span class="muted" id="accentColorValue">#E2703A</span>
+          <button class="btn-ghost" style="margin-left:auto;" onclick="resetAccentColor()">Orange par défaut</button>
         </div>
         <div class="opt-row">
           <div><div class="opt-t">Afficher les muscles</div><div class="opt-s">Petite silhouette du muscle travaillé devant chaque exercice.</div></div>
@@ -926,6 +936,27 @@
           <option value="30">0:30</option><option value="45">0:45</option><option value="60">1:00</option><option value="75">1:15</option><option value="90">1:30</option><option value="120">2:00</option><option value="150">2:30</option><option value="180">3:00</option><option value="240">4:00</option><option value="300">5:00</option>
         </select>
         <p class="muted" style="margin-top:8px;">Le chrono de repos se lance tout seul à chaque série validée. Tu peux changer la durée pendant la séance.</p>
+      </div>
+      <div class="card">
+        <h3>Notifications</h3>
+        <p class="muted" style="margin-bottom:12px;">Sur Android. Les modifications sont enregistrées tout de suite.</p>
+        <div class="nt-sec">Rappel de séance</div>
+        <label for="reminderHourSelect">Heure du rappel</label>
+        <select id="reminderHourSelect" data-dd onchange="setReminderHour(this.value)">
+          <option value="6">6:00</option><option value="7">7:00</option><option value="8">8:00</option><option value="9">9:00</option><option value="10">10:00</option><option value="11">11:00</option><option value="12">12:00</option><option value="13">13:00</option><option value="14">14:00</option><option value="15">15:00</option><option value="16">16:00</option><option value="17">17:00</option><option value="18">18:00</option><option value="19">19:00</option><option value="20">20:00</option><option value="21">21:00</option><option value="22">22:00</option><option value="23">23:00</option>
+        </select>
+        <label for="ntRemTitle" style="margin-top:12px;">Titre</label>
+        <input id="ntRemTitle" type="text" maxlength="60" oninput="setNotifText('remTitle', this.value)">
+        <label for="ntRemBody" style="margin-top:12px;">Texte</label>
+        <input id="ntRemBody" type="text" maxlength="100" oninput="setNotifText('remBody', this.value)">
+        <p class="muted" style="margin-top:8px;">Écris <b>{séance}</b> pour insérer le nom de la séance prévue. Envoyé seulement si elle n'est pas encore faite.</p>
+        <div class="nt-sec" style="margin-top:18px;">Fin du repos</div>
+        <label for="ntRestTitle">Titre</label>
+        <input id="ntRestTitle" type="text" maxlength="60" oninput="setNotifText('restTitle', this.value)">
+        <label for="ntRestBody" style="margin-top:12px;">Texte</label>
+        <input id="ntRestBody" type="text" maxlength="100" oninput="setNotifText('restBody', this.value)">
+        <p class="muted" style="margin-top:8px;">Envoyé quand le chrono de repos se termine pendant que l'appli est en arrière-plan, avec le même bip qu'à l'écran.</p>
+        <button class="btn-ghost btn-full" style="margin-top:14px;" onclick="resetNotifTexts()">Textes par défaut</button>
       </div>
       <div class="card">
         <h3>Données</h3>
@@ -1093,7 +1124,7 @@ function esc(v){
 const DAYS = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
 const DAYS_FULL = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
 const STORE_KEY = "fonte_data_v1";
-const DEFAULT_ACCENT = "#D8A94E";
+const DEFAULT_ACCENT = "#E2703A";
 const PROGRAM_COLORS = ['#D8A94E','#5FB3A6','#C96A5B','#8B9DC9','#C98BC9','#6FB36F','#C9A05F'];
 
 function seedPrograms(){
@@ -1150,7 +1181,79 @@ function loadData(){
 function saveData(){
   try{ localStorage.setItem(STORE_KEY, JSON.stringify(data)); }
   catch(e){ console.error("écriture stockage", e); }
+  scheduleRemindersSoon();
 }
+
+/* ---- Rappel Android : notification locale si la séance du jour n'est pas faite (appli Capacitor uniquement) ---- */
+const NOTIF_DEF = {remTitle:'Séance du jour', remBody:"{séance} t'attend 💪", restTitle:'Repos terminé', restBody:'On repart 💪'};
+function notifTxt(k){ const v = data.settings && data.settings.notif && data.settings.notif[k]; return (v && v.trim()) ? v.trim() : NOTIF_DEF[k]; }
+function setNotifText(k, v){
+  if(!data.settings) data.settings = {};
+  if(!data.settings.notif) data.settings.notif = {};
+  data.settings.notif[k] = v; saveData();
+}
+function fillNotifInputs(){
+  [['remTitle','ntRemTitle'],['remBody','ntRemBody'],['restTitle','ntRestTitle'],['restBody','ntRestBody']].forEach(([k,id])=>{
+    const el = document.getElementById(id); if(el) el.value = notifTxt(k);
+  });
+}
+function resetNotifTexts(){
+  if(data.settings) delete data.settings.notif;
+  saveData(); fillNotifInputs();
+  showToast('Textes par défaut remis.');
+}
+function reminderHour(){ const v = Number(data.settings && data.settings.reminderHour); return v >= 0 && v <= 23 && data.settings && data.settings.reminderHour != null ? v : 20; }
+function setReminderHour(v){
+  if(!data.settings) data.settings = {};
+  data.settings.reminderHour = Number(v); saveData();
+}
+let remTimer = null, remAsked = false;
+function scheduleRemindersSoon(){ clearTimeout(remTimer); remTimer = setTimeout(scheduleReminders, 600); }
+function getLN(){ return window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications; }
+async function notifOk(LN){
+  let perm = await LN.checkPermissions();
+  if(perm.display !== 'granted' && !remAsked){ remAsked = true; perm = await LN.requestPermissions(); }
+  return perm.display === 'granted';
+}
+/* Fin du repos : notification (avec le même bip que dans l'appli) programmée à l'heure de fin quand l'appli passe en arrière-plan */
+let restNotifAt = 0, restChanReady = false;
+async function syncRestNotif(){
+  const LN = getLN(); if(!LN) return;
+  const want = (rest.running && document.hidden) ? rest.end : 0;
+  if(Math.abs(want - restNotifAt) < 400) return;
+  restNotifAt = want;
+  try{
+    if(!(await notifOk(LN))) return;
+    if(!restChanReady){
+      await LN.createChannel({id:'rest_end', name:'Fin du repos', description:'Son à la fin du temps de repos', importance:5, visibility:1, sound:'rest_end.wav', vibration:false});
+      restChanReady = true;
+    }
+    await LN.cancel({notifications:[{id:9001}]});
+    if(want > Date.now() + 500) await LN.schedule({notifications:[{id:9001, title:notifTxt('restTitle'), body:notifTxt('restBody'), channelId:'rest_end', sound:'rest_end.wav', schedule:{at:new Date(want), allowWhileIdle:true}}]});
+  }catch(e){ console.error('repos', e); restNotifAt = 0; }
+}
+document.addEventListener('visibilitychange', ()=>{ syncRestNotif(); });
+async function scheduleReminders(){
+  const LN = getLN();
+  if(!LN || !data) return;
+  try{
+    if(!(await notifOk(LN))) return;
+    const pending = await LN.getPending();
+    if(pending.notifications && pending.notifications.length) await LN.cancel({notifications: pending.notifications.map(n => ({id: n.id}))});
+    const doneDays = new Set(data.sessions.map(x => new Date(x.date).toDateString()));
+    const now = new Date(), list = [];
+    for(let i=0; i<14; i++){
+      const d = new Date(now.getFullYear(), now.getMonth(), now.getDate()+i, reminderHour(), 0, 0);
+      if(d <= now || doneDays.has(d.toDateString())) continue;
+      const wd = d.getDay() === 0 ? 6 : d.getDay() - 1;
+      const prog = data.programs.find(p => p.id === data.schedule[wd]);
+      if(!prog) continue;
+      list.push({id: 1000 + i, title: notifTxt('remTitle'), body: notifTxt('remBody').split('{séance}').join(prog.name), schedule: {at: d, allowWhileIdle: true}});
+    }
+    if(list.length) await LN.schedule({notifications: list});
+  }catch(e){ console.error('rappels', e); }
+}
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) scheduleRemindersSoon(); });
 
 let data = loadData();
 
@@ -1185,6 +1288,8 @@ function applyMusclePref(){
   if(sw) sw.setAttribute('aria-checked', String(showMuscles()));
   const dp = document.getElementById('dropPctSelect'); if(dp) dp.value = String(dropPct());
   const dr = document.getElementById('defaultRestSelect'); if(dr) dr.value = String(defaultRest());
+  const rh = document.getElementById('reminderHourSelect'); if(rh) rh.value = String(reminderHour());
+  fillNotifInputs();
   ddSyncAll();
 }
 function toggleMuscles(){
@@ -1234,11 +1339,12 @@ function saveName(){
 
 function renderGreeting(){
   const name = (data.profile && data.profile.name) ? data.profile.name : '';
-  document.getElementById('greetingText').textContent = name ? `Salut, ${name} 👋` : 'Salut 👋';
+  document.getElementById('greetingText').textContent = name ? `Encore toi, ${name} ?` : 'Encore toi ?';
   const st = calcStreak();
   document.getElementById('streakChipNum').textContent = st;
+  const cu = document.querySelector('#streakChip .sc-unit'); if(cu) cu.textContent = st>1 ? 'séances' : 'séance';
   document.getElementById('streakChip').classList.toggle('cold', st === 0);
-  document.getElementById('streakChip').title = st + ' jour' + (st>1?'s':'') + " d'affilée";
+  document.getElementById('streakChip').title = st + ' séance' + (st>1?'s':'') + " d'affilée";
 }
 
 // ---------- XP & niveaux ----------
@@ -1334,24 +1440,22 @@ function renderFourDayRow(){
     if(isToday) cls.push('is-today');
     let stats;
     if(state==='done'){
-      const n = nMain(sess.sets);
-      const vol = sess.sets.reduce((t,x)=>t+repsSum(x)*(Number(x.weight)||0),0);
       const nex = new Set(sess.sets.map(x=>x.ex)).size;
-      stats = `<span><b>${n}</b> série${n>1?'s':''}</span><span>${nex} exo${nex>1?'s':''}</span><span>${vol>=1000 ? (vol/1000).toFixed(1).replace('.',',')+' t' : Math.round(vol)+' kg'}</span>`;
+      stats = `<span><b>${nex}</b> exo${nex>1?'s':''}</span>${sess.duration ? `<span>⏱ ${fmtDuration(sess.duration)}</span>` : ''}`;
     } else if(prog){
       const ex = prog.exercises||[];
-      const ns = ex.reduce((t,e)=>t+(e.sets||0),0);
-      stats = `<span><b>${ex.length}</b> exo${ex.length>1?'s':''}</span><span>${ns} série${ns>1?'s':''}</span><span>${state==='missed' ? 'Manquée' : (future ? 'À venir' : 'À faire')}</span>`;
+      stats = `<span><b>${ex.length}</b> exo${ex.length>1?'s':''}</span><span>${state==='missed' ? 'Manquée' : (future ? 'À venir' : 'À faire')}</span>`;
     } else {
-      stats = `<span><b>—</b></span><span>Récupération</span>`;
+      stats = '';
     }
     const mark = state==='done' ? '<span class="dmark flame">🔥</span>' : (state==='missed' ? `<span class="dmark miss">${ICON_X}</span>` : '');
     return `
       <div class="${cls.join(' ')}">
-        <div class="dname">${DAYS[weekdayIdx]}${mark}</div>
+        ${mark}<div class="dname">${DAYS[weekdayIdx]}</div>
         <div class="dnum">${d.getDate()}</div>
+        ${state==='rest' ? '<div class="dsep">—</div>' : ''}
         <div class="dtitle">${color ? `<i class="ddot" style="background:${color}"></i>` : ''}<span>${esc(title)}</span></div>
-        <div class="dstats">${stats}</div>
+        ${stats ? `<div class="dstats">${stats}</div>` : ''}
       </div>`;
     };
   const page = rels => `<div class="fd-page"><div class="four-day-row">${rels.map(dayHtml).join('')}</div></div>`;
@@ -1603,10 +1707,12 @@ function renderChrono(){
   const lab = document.getElementById('chronoTabLabel');
   const tab = lab.parentElement;
   if(rest.running && restLeftMs() <= 0){
+    const late = Date.now() - rest.end > 1500;   // fini pendant que l'appli était en arrière-plan : la notification a déjà sonné
     rest = {running:false, end:0, left:0, done:true};
-    beep(); try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){}
+    if(!late){ beep(); try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){} }
     showToast('Repos terminé. On repart.');
   }
+  syncRestNotif();
   const td = !!(timedDone && Date.now() < timedDone.until);
   const tm = !!timedRun || td;
   const tmMs = timedRun ? Date.now() - timedRun.start : (td ? timedDone.dur*1000 : 0);
@@ -2617,7 +2723,7 @@ function renderCalendar(){
     if(isToday) classes.push('today');
     let indicator = '';
     if(prog) indicator += `<div class="dot" style="background:${prog.color}"></div>`;
-    if(done) indicator += `<div class="flame">🔥</div>`;
+    if(done) classes.push('done');
     return `<div class="${classes.join(' ')}"><div class="num">${cellDate.getDate()}</div><div class="cal-indicators">${indicator}</div></div>`;
   };
   grid.classList.toggle('year', calView==='y');
@@ -2638,7 +2744,8 @@ function renderCalendar(){
         const done = sessionDatesSet.has(dt.toDateString());
         const cls = ['ym-c'];
         if(dt.toDateString()===now.toDateString()) cls.push('today');
-        const ind = (prog ? `<i class="dot" style="background:${prog.color}"></i>` : '') + (done ? '<span class="fl">🔥</span>' : '');
+        if(done) cls.push('done');
+        const ind = prog ? `<i class="dot" style="background:${prog.color}"></i>` : '';
         cells += `<span class="${cls.join(' ')}"><b>${d}</b><span class="ym-i">${ind}</span></span>`;
       }
       const cur = (m===now.getMonth() && year===now.getFullYear()) ? ' cur' : '';
@@ -2668,7 +2775,7 @@ function renderCalendar(){
   }
   document.getElementById('calLegend').innerHTML =
     data.programs.map(p => `<div class="item"><div class="sw" style="background:${p.color}"></div>${esc(p.name)}</div>`).join('') +
-    `<div class="item">🔥 séance faite</div>`;
+    `<div class="item"><div class="sw sw-done"></div>Séance faite</div>`;
 }
 
 function resetData(){
@@ -2699,33 +2806,31 @@ function doResetData(){
   drawChart();
 }
 
-function calcStreak(){
-  const sessionDates = new Set(data.sessions.map(s => new Date(s.date).toDateString()));
-  let streak = 0;
-  let cursor = new Date();
-  if(!sessionDates.has(cursor.toDateString())){
-    cursor.setDate(cursor.getDate()-1);
-  }
-  while(sessionDates.has(cursor.toDateString())){
-    streak++;
-    cursor.setDate(cursor.getDate()-1);
-  }
-  return streak;
-}
-
-function calcBestStreak(){
-  const dates = [...new Set(data.sessions.map(s => new Date(s.date).toDateString()))]
-    .map(d => new Date(d).getTime())
-    .sort((a,b)=>a-b);
-  if(dates.length === 0) return 0;
-  let best = 1, cur = 1;
-  for(let i=1;i<dates.length;i++){
-    const diffDays = Math.round((dates[i]-dates[i-1]) / 86400000);
-    if(diffDays === 1){ cur++; } else if(diffDays > 1){ cur = 1; }
+// Série calculée sur le planning : chaque séance programmée faite = +1, une séance programmée manquée remet à 0.
+// Les jours de repos ne comptent pas, une séance faite hors planning compte aussi (sans jamais casser la série).
+function streakInfo(){
+  if(data.sessions.length === 0) return {cur:0, best:0};
+  const dayKey = d => d.toDateString();
+  const done = new Set(data.sessions.map(s => dayKey(new Date(s.date))));
+  const planned = data.schedule.some(Boolean);
+  const first = new Date(Math.min(...data.sessions.map(s => new Date(s.date).getTime())));
+  first.setHours(0,0,0,0);
+  const today = new Date(); today.setHours(0,0,0,0);
+  let cur = 0, best = 0;
+  for(let d = new Date(first); d <= today; d.setDate(d.getDate()+1)){
+    const wd = d.getDay() === 0 ? 6 : d.getDay() - 1;
+    const isPlanned = planned && !!data.schedule[wd];
+    const did = done.has(dayKey(d));
+    const isToday = d.getTime() === today.getTime();
+    if(did) cur++;
+    else if(!planned) cur = 0;               // sans planning : jours consécutifs
+    else if(isPlanned && !isToday) cur = 0;  // séance programmée manquée
     best = Math.max(best, cur);
   }
-  return best;
+  return {cur, best};
 }
+function calcStreak(){ return streakInfo().cur; }
+function calcBestStreak(){ return streakInfo().best; }
 
 function renderStats(){
   const recent = data.sessions;   // toutes les séances
@@ -2737,13 +2842,13 @@ function renderStats(){
   const streak = calcStreak();
   const best = calcBestStreak();
   document.getElementById('streakNum').textContent = streak;
-  document.getElementById('streakUnit').textContent = (streak>1 ? 'jours' : 'jour') + " d'affilée";
+  document.getElementById('streakUnit').textContent = (streak>1 ? 'séances' : 'séance') + " d'affilée";
   document.getElementById('streakCard').classList.toggle('cold', streak === 0);
   document.getElementById('streakFlame').textContent = streak === 0 ? '🖤' : '🔥';
   document.getElementById('streakBest').textContent =
     streak === 0
-      ? (best > 0 ? `Ton record est de ${best} jours — relance une série !` : 'Termine une séance pour démarrer ta série')
-      : (best > streak ? `Record : ${best} jours` : 'Nouveau record !');
+      ? (best > 0 ? `Ton record est de ${best} séance${best>1?'s':''} — relance une série !` : 'Termine une séance pour démarrer ta série')
+      : (best > streak ? `Record : ${best} séance${best>1?'s':''}` : 'Nouveau record !');
 
   renderLevelBadge();
   renderGroupSplit();
@@ -2913,12 +3018,20 @@ function sessExHtml(s){
     }).join('');
     return `<div class="sd-ex"><div class="sd-exn">${muscleIcon(g.n)}<span>${esc(g.n)}</span></div>${rows}</div>`;
   }).join('');
-  return exHtml + (s.note ? `<div class="muted" style="font-size:11px; margin-top:10px; white-space:pre-wrap;">📝 ${esc(s.note)}</div>` : '');
+  return exHtml;
 }
 function openSessDetail(i){
   const s = data.sessions[i]; if(!s) return;
   document.getElementById('sdTitle').textContent = (s.name || 'Séance libre') + ' · ' + fmtDate(s.date);
+  document.getElementById('sdBody').classList.remove('note');
   document.getElementById('sdBody').innerHTML = sessExHtml(s);
+  document.getElementById('sessDetailModal').style.display = 'flex';
+}
+function openSessNote(i){
+  const s = data.sessions[i]; if(!s || !s.note) return;
+  document.getElementById('sdTitle').textContent = 'Note · ' + fmtDate(s.date);
+  document.getElementById('sdBody').classList.add('note');
+  document.getElementById('sdBody').innerHTML = `<p style="white-space:pre-wrap; font-size:14px; line-height:1.5; margin:4px 0 8px;">${esc(s.note)}</p>`;
   document.getElementById('sessDetailModal').style.display = 'flex';
 }
 function closeSessDetail(){ document.getElementById('sessDetailModal').style.display = 'none'; }
@@ -2939,7 +3052,7 @@ function sessDetailHtml(s){
   return `<div class="prog-item sc">
     <div class="sc-top">
       <div class="sc-title"><div class="ss-name">${esc(s.name || 'Séance libre')}</div><div class="sc-date">${fmtDate(s.date)}${sessStartTime(s) ? ` · ${sessStartTime(s)}` : ''}</div></div>
-      <button type="button" class="sd-ico" aria-label="Détail de la séance" onclick="openSessDetail(${data.sessions.indexOf(s)})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg></button>
+      <div class="sc-btns">${s.note ? `<button type="button" class="sd-ico" aria-label="Note de la séance" onclick="openSessNote(${data.sessions.indexOf(s)})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h10l4 4v12H5z"/><path d="M14 4v5h5M8.5 13h7M8.5 16.5h5"/></svg></button>` : ''}      <button type="button" class="sd-ico" aria-label="Détail de la séance" onclick="openSessDetail(${data.sessions.indexOf(s)})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg></button></div>
     </div>
     <div class="sc-meta"><span><b>${fmtVol(vol)}</b></span><span>${n} série${n>1?'s':''}</span><span>${byEx.length} exo${byEx.length>1?'s':''}</span>${s.duration ? `<span>⏱ ${fmtDuration(s.duration)}</span>` : ''}</div>
     <div class="prog-tags sc-exs">${exList}</div>
@@ -3235,6 +3348,7 @@ document.addEventListener('click', e=>{ if(!e.target.closest('.dd-auto')) ddClos
 document.querySelectorAll('select[data-dd]').forEach(enhanceSelect);
 
 init();
+scheduleRemindersSoon();
 </script>
 </body>
 </html>

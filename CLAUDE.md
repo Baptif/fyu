@@ -43,3 +43,9 @@ Pas de framework, pas de build web : on édite `www/index.html` directement.
 ## Mise en place du workflow GitHub (une fois)
 Le fichier est livré à la racine sous `build-apk.workflow.yml`. Le déplacer à `.github/workflows/build-apk.yml` :
 `mkdir -p .github/workflows && git mv build-apk.workflow.yml .github/workflows/build-apk.yml` (ou `mv` avant le premier commit).
+
+## Rappels Android (notifications locales)
+- Plugin `@capacitor/local-notifications` (package.json) ; le workflow ajoute les permissions au manifest après `cap add android`.
+- `scheduleReminders()` (index.html) programme, sur 14 jours, une notif à l'heure `settings.reminderHour` (défaut 20) pour chaque jour où une séance est prévue et pas encore faite. Rappelée à chaque `saveData()` (debounce) et au retour sur l'appli. Sans Capacitor (navigateur) elle ne fait rien.
+- Série (streak) : `streakInfo()` calcule sur le planning (séance prévue faite = +1, manquée = 0, repos neutre).
+- Fin du repos : `syncRestNotif()` programme (id 9001, canal `rest_end`, son `resources/rest_end.wav` copié dans res/raw par le workflow) une notification à l'heure de fin quand l'appli passe en arrière-plan, et l'annule au retour. Même bip que `beep()` (3×880 Hz).
